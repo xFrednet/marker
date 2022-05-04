@@ -39,3 +39,14 @@ macro_rules! export_lint_pass {
 }
 
 pub use export_lint_pass;
+
+/// This trait is used by the linting interface to provide additional information
+/// on `panic!` calls about the node that cause the panic. This information should
+/// be limited to a few lines. Unusally it'll be enough to return the `PanicInfo`
+/// of the [`Span`][`crate::ast::Span`].
+///
+/// This trait is not part of the stable interface.
+#[doc(hidden)]
+pub trait PanicInfo<'ast> {
+    fn get_info(&self);
+}

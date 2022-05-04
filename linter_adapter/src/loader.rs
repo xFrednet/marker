@@ -1,13 +1,16 @@
+use std::panic::RefUnwindSafe;
+
 use libloading::Library;
 
 use linter_api::ast::item::{ExternCrateItem, ModItem, UseDeclItem};
 use linter_api::context::AstContext;
-use linter_api::interface::{LintPassDeclaration, LintPassRegistry};
+use linter_api::interface::{LintPassDeclaration, LintPassRegistry, PanicInfo};
 use linter_api::LintPass;
 
 #[derive(Default)]
 pub struct ExternalLintCrateRegistry<'ast> {
-    pub lint_passes: Vec<Box<dyn LintPass<'ast>>>,
+    lint_passes: Vec<Box<dyn LintPass<'ast>>>,
+    invalid_lint_passes: Vec<Box<dyn LintPass<'ast>>>,
     _libs: Vec<Library>,
 }
 
@@ -53,6 +56,23 @@ impl<'a> ExternalLintCrateRegistry<'a> {
         }
 
         new_self
+    }
+
+    fn for_each_lint_pass<T: PanicInfo<'a> + Copy + RefUnwindSafe>(&mut self, call: impl Fn(&mut dyn LintPass, T) + RefUnwindSafe, node: T) {
+        let mut invalid = vec![];
+        // self.lint_passes.retain_mut(|lint_pass|)
+        for index in 0..self.lint_passes.len() {
+            let catch = std::panic::catch_unwind(|| {
+                let mut lint_pass = self.lint_passes[index].as_mut();
+                call(lint_pass, node);
+            });
+            if catch.is_err() {
+                invalid.push(index);
+            }
+        }
+        for index in invalid {
+            self.invalid_lint_passes.push(self.lint_passes.remove(index))
+        }
     }
 }
 

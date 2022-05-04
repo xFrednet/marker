@@ -2,6 +2,8 @@
 #![warn(clippy::index_refutable_slice)]
 #![allow(clippy::module_name_repetitions)]
 
+use std::panic::RefUnwindSafe;
+
 use ast::item::{ExternCrateItem, ItemType, ModItem, UseDeclItem};
 use context::AstContext;
 use lint::Lint;
@@ -20,7 +22,7 @@ pub mod lint;
 /// [`LintPass`] provides some additional information about the implemented lints.
 /// The adapter will walk through the entire AST once and give each node to the
 /// registered [`LintPass`]es.
-pub trait LintPass<'ast> {
+pub trait LintPass<'ast>: RefUnwindSafe {
     fn registered_lints(&self) -> Vec<&'static Lint>;
 
     fn check_item(&mut self, _cx: &'ast AstContext<'ast>, _item: ItemType<'ast>) {}
