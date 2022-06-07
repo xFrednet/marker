@@ -2,6 +2,9 @@ use std::fmt::Debug;
 
 use super::item::ItemId;
 
+mod attrs;
+pub use attrs::*;
+
 #[non_exhaustive]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct CrateId {
@@ -234,10 +237,6 @@ impl Symbol {
 
 pub type Ident<'ast> = Spanned<'ast, Symbol>;
 
-pub trait Attribute<'ast>: Debug {
-    // FIXME: Add attribute functions
-}
-
 #[derive(Debug)]
 pub struct Path<'ast> {
     segments: &'ast [PathSegment],
@@ -307,6 +306,9 @@ pub enum PathResolution {
     /// ```
     ToolItem,
     /// The path could not be resolved.
+    ///
+    /// This variant might also be used for buildin paths like the `doc` in
+    /// doc attributes.
     Unresolved,
 }
 

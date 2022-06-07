@@ -74,11 +74,15 @@ fn create_common_data<'ast, 'tcx>(
     cx: &'ast RustcContext<'ast, 'tcx>,
     rustc_item: &'tcx rustc_hir::Item<'tcx>,
 ) -> CommonItemData<'ast> {
+    let rustc_attrs = cx.tcx.get_attrs(rustc_item.def_id.to_def_id());
+    let attrs = cx.alloc_slice_from_iter(rustc_attrs.iter().map(|rustc_attr| rustc_attr.to_api(cx)));
+
     CommonItemData::new(
         rustc_item.def_id.to_def_id().to_api(cx),
         rustc_item.span.to_api(cx),
         vis_from_rustc(cx, rustc_item),
         (!rustc_item.ident.name.is_empty()).then(|| rustc_item.ident.name.to_api(cx)),
+        attrs,
     )
 }
 

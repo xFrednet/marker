@@ -54,7 +54,7 @@ pub trait ItemData<'ast>: Debug {
     /// to call them directoly on the item, instead of converting it to a [`ItemType`] first.
     fn as_item(&'ast self) -> ItemType<'ast>;
 
-    fn get_attrs(&self); // FIXME: Add return type: -> &'ast [&'ast dyn Attribute<'ast>];
+    fn get_attrs(&self) -> &[&crate::ast::Attribute<'ast>];
 }
 
 #[non_exhaustive]
@@ -80,7 +80,7 @@ impl<'ast> ItemType<'ast> {
     impl_item_type_fn!(get_span() -> &'ast dyn Span<'ast>);
     impl_item_type_fn!(get_vis() -> &Visibility<'ast>);
     impl_item_type_fn!(get_name() -> Option<Symbol>);
-    impl_item_type_fn!(get_attrs() -> ());
+    impl_item_type_fn!(get_attrs() -> &[&crate::ast::Attribute<'ast>]);
 }
 
 /// Until [trait upcasting](https://github.com/rust-lang/rust/issues/65991) has been implemented
@@ -110,6 +110,7 @@ struct CommonItemData<'ast> {
     span: &'ast dyn Span<'ast>,
     vis: Visibility<'ast>,
     name: Option<Symbol>,
+    attrs: &'ast [&'ast Attribute<'ast>],
 }
 
 macro_rules! impl_item_data {
@@ -135,8 +136,8 @@ macro_rules! impl_item_data {
                 $crate::ast::item::ItemType::$enum_name(self)
             }
 
-            fn get_attrs(&self) {
-                todo!()
+            fn get_attrs(&self) -> &[&crate::ast::Attribute<'ast>] {
+                self.data.attrs
             }
         }
     };
@@ -146,8 +147,20 @@ use impl_item_data;
 
 #[cfg(feature = "driver-api")]
 impl<'ast> CommonItemData<'ast> {
-    pub fn new(id: ItemId, span: &'ast dyn Span<'ast>, vis: Visibility<'ast>, name: Option<Symbol>) -> Self {
-        Self { id, span, vis, name }
+    pub fn new(
+        id: ItemId,
+        span: &'ast dyn Span<'ast>,
+        vis: Visibility<'ast>,
+        name: Option<Symbol>,
+        attrs: &'ast [&'ast Attribute<'ast>],
+    ) -> Self {
+        Self {
+            id,
+            span,
+            vis,
+            name,
+            attrs,
+        }
     }
 }
 
@@ -275,7 +288,7 @@ pub enum AdtVariantData<'ast> {
 ///
 /// For tuple structs the name will correspond with the field number.
 pub trait AdtField<'ast>: Debug {
-    fn get_attributes(&'ast self) -> &'ast dyn Attribute;
+    fn get_attributes(&'ast self) -> &'ast Attribute<'ast>;
 
     /// This will return the span of the field, exclusing the field attributes.
     fn get_span(&'ast self) -> &'ast dyn Span<'ast>;

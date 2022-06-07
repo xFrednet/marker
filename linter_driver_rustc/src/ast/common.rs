@@ -2,9 +2,11 @@
 
 use std::fmt::Debug;
 
-use linter_api::ast::{Attribute, BodyId, CrateId, Lifetime, Path, PathResolution, PathSegment, Span, Symbol};
+use linter_api::ast::{BodyId, CrateId, Lifetime, Path, PathResolution, PathSegment, Span, Symbol};
 
 use super::{rustc::RustcContext, ToApi};
+
+mod attr;
 
 impl<'ast, 'tcx> ToApi<'ast, 'tcx, CrateId> for rustc_hir::def_id::CrateNum {
     fn to_api(&self, _cx: &'ast RustcContext<'ast, 'tcx>) -> CrateId {
@@ -97,6 +99,20 @@ impl<'ast, 'tcx> ToApi<'ast, 'tcx, PathSegment> for rustc_hir::PathSegment<'tcx>
     }
 }
 
+impl<'ast, 'tcx> ToApi<'ast, 'tcx, Path<'ast>> for rustc_ast::Path {
+    fn to_api(&self, cx: &'ast RustcContext<'ast, 'tcx>) -> Path<'ast> {
+        let segments = cx.alloc_slice_from_iter(self.segments.iter().map(|seg| seg.to_api(cx)));
+        Path::new(segments, PathResolution::Unresolved)
+    }
+}
+
+impl<'ast, 'tcx> ToApi<'ast, 'tcx, PathSegment> for rustc_ast::PathSegment {
+    fn to_api(&self, cx: &'ast RustcContext<'ast, 'tcx>) -> PathSegment {
+        let name = self.ident.name.to_api(cx);
+        PathSegment::new(name, PathResolution::Unresolved)
+    }
+}
+
 impl<'ast, 'tcx> ToApi<'ast, 'tcx, PathResolution> for Option<rustc_hir::def::Res> {
     fn to_api(&self, cx: &'ast RustcContext<'ast, 'tcx>) -> PathResolution {
         match self {
@@ -121,11 +137,6 @@ impl<'ast, 'tcx> ToApi<'ast, 'tcx, PathResolution> for rustc_hir::def::Res {
         }
     }
 }
-
-#[derive(Debug)]
-pub struct RustcAttribute {}
-
-impl<'ast> Attribute<'ast> for RustcAttribute {}
 
 #[derive(Debug)]
 pub struct RustcLifetime {}
