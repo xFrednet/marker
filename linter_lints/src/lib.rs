@@ -1,7 +1,7 @@
 #![doc = include_str!("../README.md")]
 
 use linter_api::{
-    ast::item::{ItemData, StaticItem},
+    ast::{item::ItemData, item::StaticItem, Attribute},
     context::AstContext,
     lint::Lint,
     LintPass,
@@ -26,5 +26,9 @@ impl<'ast> LintPass<'ast> for TestLintPass {
 
     fn check_static_item(&mut self, cx: &'ast AstContext<'ast>, item: &'ast StaticItem<'ast>) {
         cx.emit_lint_span("hey there is a static item here", TEST_LINT, item.get_span());
+    }
+
+    fn check_attr(&mut self, _cx: &'ast AstContext<'ast>, _attr: &'ast Attribute<'ast>) {
+        // println!("{attr:#?}")
     }
 }

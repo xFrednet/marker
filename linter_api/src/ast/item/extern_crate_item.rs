@@ -6,10 +6,10 @@ use super::CommonItemData;
 ///
 /// ```ignore
 /// extern crate std;
-/// // `get_name()`          -> "std"
+/// // `get_name()`       -> "std"
 /// // `get_crate_name()` -> "std"
 /// extern crate std as ruststd;
-/// // `get_name()`          -> "ruststd"
+/// // `get_name()`       -> "ruststd"
 /// // `get_crate_name()` -> "std"
 /// ```
 ///

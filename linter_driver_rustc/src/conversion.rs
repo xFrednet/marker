@@ -53,10 +53,12 @@ fn process_items<'tcx>(rustc_cx: &LateContext<'tcx>, allocator: &mut Bump) {
         .map(|id| map.item(*id))
         .filter_map(|rustc_item| crate::ast::item::from_rustc(driver_cx, rustc_item))
         .collect();
-    let krate = Crate::new(
-        rustc_hir::def_id::LOCAL_CRATE.to_api(driver_cx),
-        driver_cx.alloc_slice_from_iter(items.into_iter()),
-    );
+    let krate = driver_cx.alloc_with(|| {
+        Crate::new(
+            rustc_hir::def_id::LOCAL_CRATE.to_api(driver_cx),
+            driver_cx.alloc_slice_from_iter(items.into_iter()),
+        )
+    });
 
-    adapter.process_krate(ast_cx, &krate);
+    adapter.process_krate(ast_cx, krate);
 }

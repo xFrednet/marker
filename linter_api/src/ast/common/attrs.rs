@@ -82,11 +82,13 @@ pub enum AttrInput<'ast> {
     /// The attribute didn't receive an input. An example could be:
     /// ```
     /// #[rustfmt::skip]
+    /// # mod placeholder {}
     /// ```
     None,
     /// The attribute receives an expression as an input. An example could be:
     /// ```
     /// #[clippy::msrv = "1.45.0"]
+    /// # mod placeholder {}
     /// ```
     ///
     /// FIXME, this should return an expression and not just a symbol. This requires
@@ -96,6 +98,7 @@ pub enum AttrInput<'ast> {
     /// ```
     /// #[derive(Debug, Clone)]
     /// #[allow(dead_code)]
+    /// # struct Placeholder {}
     /// ```
     DelimTokenTree(&'ast TokenTree<'ast>),
 }

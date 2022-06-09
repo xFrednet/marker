@@ -71,6 +71,12 @@ impl<'ast> LintPass<'ast> for ExternalLintCrateRegistry<'ast> {
         all_lints
     }
 
+    fn check_attr(&mut self, cx: &'ast AstContext<'ast>, attr: &'ast linter_api::ast::Attribute<'ast>) {
+        for lint_pass in self.lint_passes.iter_mut() {
+            lint_pass.check_attr(cx, attr);
+        }
+    }
+
     fn check_item(&mut self, cx: &'ast AstContext<'ast>, item: linter_api::ast::item::ItemType<'ast>) {
         for lint_pass in self.lint_passes.iter_mut() {
             lint_pass.check_item(cx, item);

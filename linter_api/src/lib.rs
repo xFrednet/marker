@@ -2,7 +2,10 @@
 #![warn(clippy::index_refutable_slice)]
 #![allow(clippy::module_name_repetitions)]
 
-use ast::item::{ExternCrateItem, ItemType, ModItem, StaticItem, UseDeclItem};
+use ast::{
+    item::{ExternCrateItem, ItemType, ModItem, StaticItem, UseDeclItem},
+    Attribute,
+};
 use context::AstContext;
 use lint::Lint;
 
@@ -22,6 +25,8 @@ pub mod lint;
 /// registered [`LintPass`]es.
 pub trait LintPass<'ast> {
     fn registered_lints(&self) -> Vec<&'static Lint>;
+
+    fn check_attr(&mut self, _cx: &'ast AstContext<'ast>, _attr: &'ast Attribute<'ast>) {}
 
     fn check_item(&mut self, _cx: &'ast AstContext<'ast>, _item: ItemType<'ast>) {}
 

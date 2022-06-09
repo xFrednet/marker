@@ -23,12 +23,14 @@ impl<'ast> Adapter<'ast> {
         Self { external_lint_crates }
     }
 
-    pub fn process_krate(&mut self, cx: &'ast AstContext<'ast>, krate: &Crate<'ast>) {
+    pub fn process_krate(&mut self, cx: &'ast AstContext<'ast>, krate: &'ast Crate<'ast>) {
         for item in krate.get_items() {
-            self.external_lint_crates.check_item(cx, *item);
-        }
+            for attr in item.get_attrs() {
+                self.external_lint_crates.check_attr(cx, attr);
+            }
 
-        for item in krate.get_items() {
+            self.external_lint_crates.check_item(cx, *item);
+
             match item {
                 ItemType::Mod(data) => self.external_lint_crates.check_mod(cx, *data),
                 ItemType::ExternCrate(data) => self.external_lint_crates.check_extern_crate(cx, *data),

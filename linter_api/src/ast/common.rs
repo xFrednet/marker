@@ -101,7 +101,7 @@ pub trait Span<'ast>: Debug {
     /// [`Span::snippet_with_applicability`] to ensure that the [`Applicability`] stays correct.
     ///
     /// # Example
-    /// ```rust,ignore
+    /// ```text
     /// // Given two spans one for `value` and one for the `init` expression.
     /// let value = Vec::new();
     /// //  ^^^^^   ^^^^^^^^^^
@@ -300,9 +300,10 @@ pub enum PathResolution {
     Item(ItemId),
     /// An path belonging to a tool. This will for instance be used for attributes
     /// like:
-    /// ```ignore
-    /// #[clippy::msrv]
+    /// ```
+    /// #[clippy::msrv = "1.62.0"]
     /// #[rustfmt::skip]
+    /// # mod placeholder {}
     /// ```
     ToolItem,
     /// The path could not be resolved.

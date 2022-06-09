@@ -254,20 +254,20 @@ pub trait StructItem<'ast>: ItemData<'ast> {
 #[derive(Debug)]
 pub enum AdtVariantData<'ast> {
     /// A unit struct like:
-    /// ```rs
+    /// ```rust
     /// struct Name1;
     /// struct Name2 {};
     /// ```
     Unit,
     /// A tuple struct like:
-    /// ```rs
+    /// ```rust
     /// struct Name(u32, u64);
     /// ```
     /// This representation doesn't contain spans of each individual type, for diagnostics
     /// please span over the entire struct.
     Tuple(&'ast [&'ast dyn AdtField<'ast>]),
     /// A field struct like:ö
-    /// ```rs
+    /// ```rust
     /// struct Name {
     ///     field: u32,
     /// };
