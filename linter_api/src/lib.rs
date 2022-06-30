@@ -2,6 +2,11 @@
 #![warn(clippy::index_refutable_slice)]
 #![allow(clippy::module_name_repetitions)]
 
+// This is used to represent the tokens for macros and attributes in a stable
+// way. Using a known representation also allows users to use common tooling
+// to work with these tokens.
+extern crate proc_macro;
+
 use ast::{
     item::{ExternCrateItem, ItemType, ModItem, StaticItem, UseDeclItem},
     Attribute,
