@@ -1,4 +1,4 @@
-use linter_api::ast::{AttrInput, AttrStyle, Attribute, Path, PathResolution, PathSegment, Symbol};
+use linter_api::ast::{AttrInput, Attribute, Path, PathResolution, PathSegment, Symbol};
 
 use crate::ast::{rustc::RustcContext, ToApi};
 
@@ -24,15 +24,6 @@ impl<'ast, 'tcx> ToApi<'ast, 'tcx, &'ast Attribute<'ast>> for rustc_ast::Attribu
             },
         };
 
-        cx.alloc_with(|| Attribute::new(self.style.to_api(cx), path, input, cx.new_span(self.span)))
-    }
-}
-
-impl<'ast, 'tcx> ToApi<'ast, 'tcx, AttrStyle> for rustc_ast::AttrStyle {
-    fn to_api(&self, cx: &'ast RustcContext<'ast, 'tcx>) -> AttrStyle {
-        match self {
-            rustc_ast::AttrStyle::Outer => AttrStyle::Outer,
-            rustc_ast::AttrStyle::Inner => AttrStyle::Inner,
-        }
+        cx.alloc_with(|| Attribute::new(self.style == rustc_ast::AttrStyle::Outer, path, input, cx.new_span(self.span)))
     }
 }
