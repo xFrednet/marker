@@ -1,3 +1,6 @@
 [workspace]
 members = [
+    "linter_api",
+    "linter_driver",
+    "linter_lints",
 ]
