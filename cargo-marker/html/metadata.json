@@ -1,0 +1,34 @@
+{
+    "metadata": {
+        "version": "v0.3.0",
+        "lintCrates": [
+            {
+                "name": "buildin",
+                "version": "v0.3.0",
+                "lints": [
+                    {
+                        "name": "marker::unknown_lints",
+                        "level": "Allow",
+                        "desc": "TODO"
+                    }
+                ]
+            },
+            {
+                "name": "marker_lints",
+                "version": "v0.3.0",
+                "lints": [
+                    {
+                        "name": "marker::marker_lints::diag_msg_uppercase_start",
+                        "level": "Warn",
+                        "desc": "### What it does\nDiagnostic messages should start with lower case letter according to [rustc's dev guide]. \n\n[rustc's dev guide]: <https://rustc-dev-guide.rust-lang.org/diagnostics.html#diagnostic-output-style-guide>"
+                    },
+                    {
+                        "name": "marker::marker_lints::not_using_has_span_trait",
+                        "level": "Allow",
+                        "desc": "### What it does\nSuggests using `impl HasSpan` for functions that need to take `Span` as a parameter to make them more ergonomic"
+                    }
+                ]
+            }
+        ]
+    }
+}

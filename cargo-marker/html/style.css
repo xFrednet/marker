@@ -1,0 +1,102 @@
+/* Color themes */
+@media (prefers-color-scheme: light) {
+    body {
+        --text-color: black;
+        --border-color: #d3d3d3;
+
+        --background: white;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        --text-color: #d3d3d3;
+        --icon-color: #7a7a7a;
+        --link-color: #ffac5f;
+
+        --border-color: #737480;
+        --background: #14161b;
+
+        --sidebar-background: #252832;
+        --sidebar-active-link-background: #2f3341;
+
+    }
+}
+
+/* Settings */
+/* TODO, Check this for mobile*/
+body {
+    --sidebar-width: 17em;
+}
+
+/* General Style*/
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--background);
+}
+
+h1,
+h2,
+p {
+    color: var(--text-color);
+}
+
+a {
+    color: var(--link-color)
+}
+
+.fa {
+    color: var(--icon-color);
+}
+
+/* Side navigation */
+.sidebar {
+    background-color: var(--sidebar-background);
+}
+
+.sidebar {
+    height: 100%;
+    width: var(--sidebar-width);
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+}
+
+.marker-logo {
+    max-width: 9em;
+}
+
+.sidebar-text-container {
+    margin-left: 1em;
+}
+
+.sidebar-selector li a {
+    /* Display and Overflow */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    /* Spacing */
+    padding: 0.4em;
+    margin-left: -0.4em;
+    /* Text */
+    text-decoration: none;
+}
+
+.sidebar-selector li a:hover {
+    background-color: var(--sidebar-active-link-background);
+}
+
+.sidebar-selector,
+.sidebar-selector li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* page-content */
+.page-content {
+    margin-left: var(--sidebar-width);
+}
