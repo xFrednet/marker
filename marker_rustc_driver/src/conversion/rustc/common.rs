@@ -57,12 +57,6 @@ impl_into_hir_id_for!(VarId);
 impl_into_hir_id_for!(StmtId);
 impl_into_hir_id_for!(FieldId);
 
-#[derive(Debug, Clone, Copy)]
-pub struct SpanSourceInfo {
-    pub rustc_span_cx: rustc_span::hygiene::SyntaxContext,
-    pub rustc_start_offset: usize,
-}
-
 impl<'ast, 'tcx> RustcConverter<'ast, 'tcx> {
     #[must_use]
     pub fn to_crate_num(&self, api_id: CrateId) -> hir::def_id::CrateNum {

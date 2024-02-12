@@ -18,7 +18,7 @@ thread_local! {
     /// Storing the [`Adapter`] in a `thread_local` is safe, since rustc is currently
     /// only single threaded. This cell will therefore only be constructed once, and
     /// this driver will always use the same adapter.
-    static ADAPTER: OnceCell<Adapter> = OnceCell::new();
+    static ADAPTER: OnceCell<Adapter> = const { OnceCell::new() };
 }
 
 pub struct RustcLintPass;

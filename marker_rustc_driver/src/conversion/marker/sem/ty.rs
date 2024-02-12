@@ -155,7 +155,9 @@ impl<'ast, 'tcx> MarkerConverterInner<'ast, 'tcx> {
                         .build(),
                 ),
             ),
-            mid::ty::TyKind::Coroutine(_, _, _) | mid::ty::TyKind::CoroutineWitness(_, _) => {
+            mid::ty::TyKind::Coroutine(_, _)
+            | mid::ty::TyKind::CoroutineWitness(_, _)
+            | rustc_middle::ty::ty_kind::TyKind::CoroutineClosure(_, _) => {
                 TyKind::Unstable(self.alloc(UnstableTy::builder().data(data).build()))
             },
             mid::ty::TyKind::Never => TyKind::Never(self.alloc(NeverTy::builder().data(data).build())),

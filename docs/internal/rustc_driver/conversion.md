@@ -15,8 +15,6 @@ together based on the conversion direction:
 Information only used by one conversion direction is stored in the related context. An example
 for this is the node cache, which stores converted nodes. The cache is only needed for the rustc
 to marker direction. Information required by both converters is stored in the shared `Storage` object.
-An example is `SpanSourceInfo` required to create the API spans and convert them back to rustc's
-representation.
 
 Structs used by both conversion directions, like ID layouts, are stored inside the `common`
 submodule. The conversion context instances should be independent and in theory don't know

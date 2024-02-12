@@ -347,7 +347,7 @@ impl<'ast, 'tcx> MarkerConverterInner<'ast, 'tcx> {
                     rustc_ast::LitIntType::Unsigned(rustc_ast::UintTy::U128) => Some(IntSuffix::U128),
                     rustc_ast::LitIntType::Unsuffixed => None,
                 };
-                ExprKind::IntLit(self.alloc(IntLitExpr::new(data, *value, suffix)))
+                ExprKind::IntLit(self.alloc(IntLitExpr::new(data, value.get(), suffix)))
             },
             rustc_ast::LitKind::Float(lit_sym, kind) => {
                 let suffix = match kind {
@@ -403,11 +403,7 @@ impl<'ast, 'tcx> MarkerConverterInner<'ast, 'tcx> {
 
     #[must_use]
     fn to_match_arm(&self, arm: &hir::Arm<'tcx>) -> MatchArm<'ast> {
-        let guard = match &arm.guard {
-            Some(hir::Guard::If(expr)) => Some(self.to_expr(expr)),
-            Some(hir::Guard::IfLet(lets)) => Some(self.to_let_expr(lets, arm.hir_id)),
-            None => None,
-        };
+        let guard = arm.guard.map(|e| self.to_expr(e));
         MatchArm::new(
             self.to_span_id(arm.span),
             self.to_pat(arm.pat),
@@ -457,7 +453,8 @@ impl<'ast, 'tcx> MarkerConverterInner<'ast, 'tcx> {
                 }
                 unreachable!("`async` block desugar always has the same structure")
             },
-            hir::ClosureKind::Coroutine(
+            hir::ClosureKind::CoroutineClosure(_)
+            | hir::ClosureKind::Coroutine(
                 hir::CoroutineKind::Desugared(hir::CoroutineDesugaring::Gen | hir::CoroutineDesugaring::AsyncGen, _)
                 | hir::CoroutineKind::Desugared(hir::CoroutineDesugaring::Async, hir::CoroutineSource::Closure)
                 | hir::CoroutineKind::Coroutine(_),

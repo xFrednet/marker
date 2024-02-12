@@ -81,7 +81,7 @@ impl<'ast, 'tcx: 'ast> MarkerContextDriver<'ast> for RustcContext<'ast, 'tcx> {
             return;
         };
         let lint = self.rustc_converter.to_lint(diag.lint);
-        self.rustc_cx.struct_span_lint_hir(
+        self.rustc_cx.node_span_lint(
             lint,
             id,
             self.rustc_converter.to_span(diag.span),

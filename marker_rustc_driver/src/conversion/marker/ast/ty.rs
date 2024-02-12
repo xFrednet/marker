@@ -23,7 +23,7 @@ impl<'ast, 'tcx> MarkerConverterInner<'ast, 'tcx> {
             hir::TyKind::Array(inner_ty, rust_len) => {
                 let len = match rust_len {
                     hir::ArrayLen::Body(anon) => Some(self.to_const_expr(*anon)),
-                    hir::ArrayLen::Infer(_, _) => None,
+                    hir::ArrayLen::Infer(_) => None,
                 };
                 TyKind::Array(self.alloc(ArrayTy::new(data, self.to_syn_ty(inner_ty), len)))
             },
@@ -64,7 +64,9 @@ impl<'ast, 'tcx> MarkerConverterInner<'ast, 'tcx> {
                 data,
                 self.to_syn_ty_param_bound_from_hir(rust_bounds, rust_lt),
             ))),
-            hir::TyKind::Infer => TyKind::Inferred(self.alloc(InferredTy::new(data))),
+            rustc_hir::TyKind::InferDelegation(_, _) | hir::TyKind::Infer => {
+                TyKind::Inferred(self.alloc(InferredTy::new(data)))
+            },
         }
     }
 

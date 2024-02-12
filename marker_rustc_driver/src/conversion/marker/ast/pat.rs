@@ -143,10 +143,14 @@ impl<'ast, 'tcx> MarkerConverterInner<'ast, 'tcx> {
                 // * Tracking issue: rust#29641
                 PatKind::Unstable(self.alloc(UnstablePat::new(data)))
             },
-            rustc_hir::PatKind::Never => {
+            hir::PatKind::Never => {
                 // Unstable:
                 // * Feature `never_patterns`
                 // * Tracking issue: rust#118155
+                PatKind::Unstable(self.alloc(UnstablePat::new(data)))
+            },
+            hir::PatKind::Err(_) => {
+                // This should never reach Marker, but better be safe than sorry.
                 PatKind::Unstable(self.alloc(UnstablePat::new(data)))
             },
         }

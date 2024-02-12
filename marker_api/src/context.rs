@@ -29,7 +29,7 @@ thread_local! {
     ///
     /// See: `./docs/internal/driver-info.md` for more context
     #[doc(hidden)]
-    static AST_CX: RefCell<Option<&'static MarkerContext<'static>>> = RefCell::new(None);
+    static AST_CX: RefCell<Option<&'static MarkerContext<'static>>> = const { RefCell::new(None) };
 }
 
 /// **Warning**

@@ -381,7 +381,7 @@ mod test {
     fn expr_struct_size() {
         // These sizes are allowed to change, this is just a check to have a
         // general overview and to prevent accidental changes
-        assert_size_of::<IntLitExpr<'_>>(&expect!["40"]);
+        assert_size_of::<IntLitExpr<'_>>(&expect!["48"]);
         assert_size_of::<FloatLitExpr<'_>>(&expect!["32"]);
         assert_size_of::<StrLitExpr<'_>>(&expect!["48"]);
         assert_size_of::<CharLitExpr<'_>>(&expect!["24"]);

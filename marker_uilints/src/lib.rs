@@ -140,8 +140,7 @@ impl LintPass for TestLintPass {
         if let ItemKind::Fn(func) = item {
             if item
                 .ident()
-                .map(|ident| ident.name().starts_with("print_with_body"))
-                .unwrap_or_default()
+                .is_some_and(|ident| ident.name().starts_with("print_with_body"))
             {
                 cx.emit_lint(TEST_LINT, item, "printing item with body")
                     .decorate(|diag| {
@@ -150,11 +149,7 @@ impl LintPass for TestLintPass {
                         diag.note(format!("Body: {:#?}", cx.ast().body(func.body_id().unwrap())));
                     });
             }
-            if item
-                .ident()
-                .map(|name| name.name().starts_with("test_vis"))
-                .unwrap_or_default()
-            {
+            if item.ident().is_some_and(|name| name.name().starts_with("test_vis")) {
                 cx.emit_lint(TEST_ITEM_VISIBILITY, item, "can you see this item?")
                     .decorate(|diag| {
                         let ast_vis = item.visibility();

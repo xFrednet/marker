@@ -29,6 +29,7 @@ use crate::common::{Level, MacroReport};
 /// be constructed using the [`declare_lint`](crate::declare_lint) macro.
 #[repr(C)]
 #[derive(Debug, PartialEq, Eq, Hash)]
+#[allow(clippy::pub_underscore_fields)]
 pub struct Lint {
     /// The string identifier of this lint.
     ///

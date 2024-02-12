@@ -22,6 +22,7 @@ pub struct FfiStr<'a> {
 }
 
 impl<'a> PartialEq for FfiStr<'a> {
+    #[allow(clippy::unconditional_recursion)]
     fn eq(&self, other: &Self) -> bool {
         self.get().eq(other.get())
     }
@@ -141,6 +142,7 @@ pub struct FfiSlice<'a, T> {
 impl<'a, T: Eq> Eq for FfiSlice<'a, T> {}
 
 impl<'a, T: PartialEq> PartialEq for FfiSlice<'a, T> {
+    #[allow(clippy::unconditional_recursion)]
     fn eq(&self, other: &Self) -> bool {
         self.get().eq(other.get())
     }

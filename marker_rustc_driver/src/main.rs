@@ -48,7 +48,7 @@ fn main() {
             // This is a bit of a hack, but this way we can emit our own errors
             // without having to change the rustc driver.
             #[expect(deprecated)]
-            rustc_span::ErrorGuaranteed::unchecked_claim_error_was_emitted()
+            rustc_span::ErrorGuaranteed::unchecked_error_guaranteed()
         })
     }))
 }
